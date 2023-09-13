@@ -1,9 +1,6 @@
 package parametrizacao;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
+import java.time.*;
 import java.util.Date;
 
 public class Parameterization {
@@ -21,7 +18,7 @@ public class Parameterization {
         this.endDate = takeWorkPeriod(endDate, false);
 
         calculateMinutes();
-        splitMinutes();
+//        splitMinutes();
     }
 
     private void calculateMinutesTESTE(){
@@ -62,7 +59,6 @@ public class Parameterization {
         LocalDateTime dayTime = LocalDateTime.of(startDate.getYear(), startDate.getMonth(), startDate.getDayOfMonth(), 6, 0);
         LocalDateTime nightTime = LocalDateTime.of(startDate.getYear(), startDate.getMonth(), startDate.getDayOfMonth(), 22, 0);
 
-        // Horas diurnas
         if(isDayTime(startDate)){
             if(isDayTime(endDate) & startDate.getDayOfMonth() == endDate.getDayOfMonth()){
                 this.minutesDayTime = getDifferenceInMinutes(startDate, endDate);
@@ -80,10 +76,26 @@ public class Parameterization {
             this.minutesDayTime = getDifferenceInMinutes(dayTime, endDate);
             this.minutesNightTime = getDifferenceInMinutes(startDate, isDayTime(endDate)?dayTime:endDate);
         }
+        splitMinutes(true, this.minutesDayTime);
+        splitMinutes(false, this.minutesNightTime);
     }
 
-    private void splitMinutes(){
+    private void splitMinutes(boolean isDayTime, int allTimeWorkingInMinutes){
+        // 120 min = 2h
+        int min = 120;
+        double nightHour = 1.1429;
+        double hours = (double) Math.min(allTimeWorkingInMinutes, min) / 60;
+        double hoursLeft = (double) (allTimeWorkingInMinutes > min ? allTimeWorkingInMinutes - min : 0) / 60;
 
+        if(isDayTime){
+            this.v1601 = hours;
+            this.v1602 = hoursLeft;
+        }
+        else{
+            this.v3000 = hours * nightHour;
+            this.v3001 = hoursLeft * nightHour;
+            this.v1809 = (hours + hoursLeft) * nightHour;
+        }
     }
 
     private boolean isDayTime(LocalDateTime date){
@@ -114,6 +126,38 @@ public class Parameterization {
         return Math.max(minutes, 0);
     }
 
+    public void setStartWorkTime(int startWorkTime) {
+        this.startWorkTime = startWorkTime;
+    }
+
+    public void setEndWorkTime(int endWorkTime) {
+        this.endWorkTime = endWorkTime;
+    }
+
+
+    // -------------------- //
+    // Tirar depois do desenvolvimento //
+    // -------------------- //
+    public double getV1601() {
+        return v1601;
+    }
+
+    public double getV1602() {
+        return v1602;
+    }
+
+    public double getV3000() {
+        return v3000;
+    }
+
+    public double getV3001() {
+        return v3001;
+    }
+
+    public double getV1809() {
+        return v1809;
+    }
+
     public LocalDateTime getStartDate() {
         return startDate;
     }
@@ -128,13 +172,5 @@ public class Parameterization {
 
     public int getMinutesNightTime() {
         return minutesNightTime;
-    }
-
-    public void setStartWorkTime(int startWorkTime) {
-        this.startWorkTime = startWorkTime;
-    }
-
-    public void setEndWorkTime(int endWorkTime) {
-        this.endWorkTime = endWorkTime;
     }
 }
