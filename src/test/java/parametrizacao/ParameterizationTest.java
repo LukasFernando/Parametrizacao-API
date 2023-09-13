@@ -11,9 +11,9 @@ class ParameterizationTest {
         System.out.println("\n--------------------------\n");
         testar(8, 2, 0, 8, 7, 0);
         System.out.println("\n--------------------------\n");
-        testar(8, 20, 40, 8, 23, 50);
+        testar(8, 19, 10, 8, 23, 50);
         System.out.println("\n--------------------------\n");
-        testar(8, 18, 0, 9, 0, 10);
+        testar(8, 18, 0, 9, 0, 0);
         System.out.println("\n--------------------------\n");
         testar(8, 21, 0, 9, 7, 0);
         System.out.println("\n--------------------------\n");
@@ -37,6 +37,10 @@ class ParameterizationTest {
 
         System.out.println("Minutos diurnos: " + parameterization.getMinutesDayTime());
         System.out.println("Minutos noturnos: " + parameterization.getMinutesNightTime());
+        System.out.println("v1601: " + parameterization.getV1601());
+        System.out.println("v1602: " + parameterization.getV1602());
+        System.out.println("v3000: " + parameterization.getV3000());
+        System.out.println("v3001: " + parameterization.getV3001());
+        System.out.println("v1809: " + parameterization.getV1809());
     }
-
 }
