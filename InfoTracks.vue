@@ -18,10 +18,10 @@ var series = []
 var labels = []
 var colors = []
 
-function teste(){
+function startDashboardVariables(){
   const currentTheme = vuetifyTheme.current.value.colors
   axios
-    .get('http://localhost:8080/dash/api/getall/test')
+    .get('http://localhost:8080/dash/opntrack/visualization')
     .then((response) => {
       const data = response.data;
       for(let key in data){
@@ -30,16 +30,15 @@ function teste(){
         series.push(parseInt(data[key]['amount']))
         labels.push(data[key]['title'])
         colors.push(
-          colorStr === 'success' ? 
-            currentTheme.success : colorStr === 'primary' ? 
-            currentTheme.primary : colorStr === 'secondary' ? 
-            currentTheme.secondary : colorStr === 'info' ? 
-            currentTheme.info : currentTheme.surface
+          colorStr === 'success' ? currentTheme.success : 
+          colorStr === 'primary' ? currentTheme.primary : 
+          colorStr === 'secondary' ? currentTheme.secondary : 
+          colorStr === 'info' ? currentTheme.info : currentTheme.warning
         )
       }
-      console.log(orders)
-      console.log(series)
-      console.log(labels)
+      // console.log(orders)
+      // console.log(series)
+      // console.log(labels)
       
     })
     .catch((error) => {
@@ -47,7 +46,7 @@ function teste(){
     })
 }
 
-teste()
+startDashboardVariables()
 
 function getPercentage(){
   return '30%'
@@ -109,7 +108,7 @@ const chartOptions = computed(() => {
       colors: [currentTheme.surface],
     },
     legend: { show: false },
-    tooltip: { enabled: false },
+    tooltip: { enabled: true },
     dataLabels: { enabled: false },
     labels: labels,
     // labels: [
@@ -173,7 +172,6 @@ const chartOptions = computed(() => {
 
 <template>
 <div>
-  <Button @click="teste">Clique aqui</Button>
   <VCard>
     <VCardItem class="pb-3">
       <VCardTitle class="mb-1">
@@ -192,7 +190,7 @@ const chartOptions = computed(() => {
       <div class="d-flex align-center justify-space-between mb-3">
         <div class="flex-grow-1">
           <h4 class="text-h4 mb-1">
-            8
+            {{ labels.length }}
           </h4>
           <span>Total De Tracks</span>
         </div>
